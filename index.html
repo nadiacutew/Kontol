@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDOS Attack Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #555;
+            color: white;
+        }
+        button {
+            background-color: #e74c3c;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c0392b;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Thunder Attack</h1>
+        <form id="attack-form">
+            <label for="url">Enter Target url:</label>
+            <input type="text" id="url" name="url" required>
+            <label for="duration"> Attack Duration:</label>
+            <select id="duration" name="duration">
+                <option value="60">60 Seconds</option>
+                <option value="120">120 Seconds</option>
+                <option value="180">180 Seconds</option>
+            </select>
+            <button type="submit">Start Attack</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById('attack-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const duration = document.getElementById('duration').value;
+            if (url) {
+                fetch('/start-attack', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: url, duration: duration })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('message').textContent = 'Attack Starting...!';
+                    setTimeout(() => {
+                        document.getElementById('message').textContent = 'Attack Succesfully by ThunderX!';
+                    }, duration * 1000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to initiate attack.');
+                });
+            } else {
+                alert('Url cannot be empty!');
+            }
+        });
+    </script>
+</body>
+</html>
